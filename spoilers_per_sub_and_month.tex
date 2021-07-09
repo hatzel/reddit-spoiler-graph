@@ -1,0 +1,187 @@
+\documentclass[border=1cm]{standalone}
+\usepackage[scaled]{helvet}
+\renewcommand\familydefault{\sfdefault} 
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+\usepgfplotslibrary{colorbrewer}
+\pgfplotsset{compat=1.16}
+\usepackage{xcolor}
+\begin{document}
+\pgfplotsset{cycle list/Set2-8}
+\begin{tikzpicture}[scale=1, transform shape]
+    % let both axes use the same layers
+    \pgfplotsset{set layers}
+    % fake axiss to get well positioned x labels
+    % ybar diagrams are unfortunatley broken: https://sourceforge.net/p/pgfplots/bugs/218/
+    \begin{axis}[
+            ybar interval,
+            ymin=-5000, ymax=80000,
+            xmin={2010-01-01}, xmax={2019-05-15},
+            width=20cm,
+            height=10cm,
+            date coordinates in=x,
+            xticklabel=\year,
+            ytick=\empty,
+            yticklabels={},
+            xtick={
+                2010-12-17,
+                2011-12-17,
+                2012-12-17,
+                2013-12-17,
+                2014-12-17,
+                2015-12-17,
+                2016-12-17,
+                2017-12-17,
+                2018-12-17,
+                2019-12-17
+            },
+            xlabel=Month,
+            xlabel near ticks
+        ]
+        \addplot+[opacity=0] table [x index=0, y=others, col sep=comma] {data/spoiler_comments_per_month_and_sub.csv};
+    \end{axis}
+    \begin{axis}[
+            ybar stacked,
+            ymin=-5000, ymax=80000,
+            xmin={2010-01-01}, xmax={2019-05-15},
+            % hide the axis
+            axis lines=left, xtick=\empty,
+            cycle list name=Set2-8,
+            every axis plot/.append style={fill},
+            width=20cm,
+            bar width=4.5pt,
+            height=10cm,
+            date coordinates in=x,
+            xticklabel=\year,
+            % ytick=data,
+            ylabel={Inline Spoilers},
+            xlabel near ticks,
+            legend style={
+                at={(0.02,0.98)},
+                anchor={north west},
+                nodes={scale=0.75}
+            }
+        ]
+        \addplot+[index of colormap={1 of Set2-8}]
+            table [
+                x index=0,
+                col sep=comma,
+                y expr=\thisrow{others}
+                + \thisrow{doctorwho}
+                + \thisrow{math}
+                + \thisrow{funny}
+                + \thisrow{gameofthrones}
+                + \thisrow{lost}
+                % + \thisrow{AskReddit}
+                + \thisrow{grandorder}
+                + \thisrow{books}
+                + \thisrow{DestinyTheGame}
+                + \thisrow{asoiaf}
+                + \thisrow{fireemblemcasual}
+                + \thisrow{comics}
+                + \thisrow{fireemblem}
+                + \thisrow{bookclub}
+                + \thisrow{fnv}
+                + \thisrow{Undertale}
+                + \thisrow{sodypop}
+                + \thisrow{StardustCrusaders}
+                + \thisrow{metalgearsolid}
+                + \thisrow{IAmA}
+                % + \thisrow{reddeadredemption}
+                + \thisrow{Diablo}
+                + \thisrow{DDLC}
+                + \thisrow{fo4}
+                + \thisrow{ColtsvsJetsLive}
+                + \thisrow{delusionalcraigslist}
+                + \thisrow{StoriesWithAHole}
+                + \thisrow{MassEffectPhoenix}
+                + \thisrow{thewalkingdead}
+                + \thisrow{Naruto}
+                + \thisrow{pokemon}
+                + \thisrow{jamt9000}
+                + \thisrow{Animemes}
+                + \thisrow{NFLstreamLives}
+                + \thisrow{MrRobot}
+                + \thisrow{WTF}
+                + \thisrow{ShingekiNoKyojin}
+                + \thisrow{TheWitness}
+                + \thisrow{bindingofisaac}
+                + \thisrow{scifi}
+                + \thisrow{GrandTheftAutoV}
+                + \thisrow{stevenuniverse}
+                % + \thisrow{PictureGame}
+                + \thisrow{Portal}
+                + \thisrow{FFXV}
+                + \thisrow{riddles}
+                + \thisrow{darksouls}
+                + \thisrow{Sekiro}
+                % + \thisrow{masseffect}
+                + \thisrow{DotA2}
+                + \thisrow{Xenoblade_Chronicles}
+                + \thisrow{tvclub}
+                + \thisrow{halo}
+                + \thisrow{witcher}
+                % + \thisrow{anime}
+                + \thisrow{smashbros}
+                + \thisrow{babylon5}
+                + \thisrow{PS3}
+                + \thisrow{TwoBestFriendsPlay}
+                + \thisrow{Games}
+                + \thisrow{KingdomHearts}
+                + \thisrow{rupaulsdragrace}
+                + \thisrow{visualnovels}
+                + \thisrow{zelda}
+                % + \thisrow{gaming}
+                + \thisrow{skyrim}
+                + \thisrow{Deusex}
+                + \thisrow{Fallout}
+                + \thisrow{AceAttorney}
+                % + \thisrow{StarWars}
+                + \thisrow{danganronpa}
+                + \thisrow{bloodborne}
+                + \thisrow{BokuNoHeroAcademia}
+                + \thisrow{reddit.com}
+                + \thisrow{TheLastAirbender}
+                + \thisrow{FinalFantasy}
+                + \thisrow{dragonage}
+                + \thisrow{manga}
+                + \thisrow{WebGames}
+                + \thisrow{DarkSouls2}
+                + \thisrow{darksouls3}
+                + \thisrow{breakingbad}
+                + \thisrow{Borderlands}
+                + \thisrow{movies}
+                + \thisrow{dwarffortress}
+                + \thisrow{Bioshock}
+                + \thisrow{harrypotter}
+                + \thisrow{nier}
+                + \thisrow{TheExpanse}
+                + \thisrow{westworld}
+                + \thisrow{marvelstudios}
+            ]
+            {data/spoiler_comments_per_month_and_sub.csv};
+        \addlegendentry{Others}
+        \label{pgfplot:spoilers_per_sub}
+        \addplot+[index of colormap={2 of Set2-8}] table [x index=0, y=anime, col sep=comma] {data/spoiler_comments_per_month_and_sub.csv};
+        \addlegendentry{anime}
+        \addplot+[index of colormap={3 of Set2-8}] table [x index=0, y=AskReddit, col sep=comma] {data/spoiler_comments_per_month_and_sub.csv};
+        \addlegendentry{AskReddit}
+        \addplot+[index of colormap={4 of Set2-8}] table [x index=0, y=StarWars, col sep=comma] {data/spoiler_comments_per_month_and_sub.csv};
+        \addlegendentry{StarWars}
+        % \addplot+[index of colormap={5 of Set2-8}] table
+        %     [x index=0, y expr=\thisrow{asoiaf} + \thisrow{gameofthrones}, col sep=comma]
+        %     {data/spoiler_comments_per_month_and_sub.csv};
+        % \addlegendentry{asoiaf \& gameofthrones}
+        \addplot+[index of colormap={5 of Set2-8}] table
+            [x index=0, y expr=\thisrow{asoiaf} + \thisrow{gaming}, col sep=comma]
+            {data/spoiler_comments_per_month_and_sub.csv};
+        \addlegendentry{gaming}
+        \addplot+[index of colormap={6 of Set2-8}] table [x index=0, y=masseffect, col sep=comma] {data/spoiler_comments_per_month_and_sub.csv};
+        \addlegendentry{masseffect}
+        \addplot+[index of colormap={7 of Set2-8}] table [x index=0, y=reddeadredemption, col sep=comma] {data/spoiler_comments_per_month_and_sub.csv};
+        \addlegendentry{reddeadredemption}
+    \end{axis}
+\end{tikzpicture}
+\end{document}
